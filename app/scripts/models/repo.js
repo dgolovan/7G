@@ -24,6 +24,7 @@ sevengeese.Models = sevengeese.Models || {};
             var response = { name: resp.name, 
                              forks: forks, 
                              url: resp.html_url, 
+                             is_fork: resp.fork,
                              created: new Date(created).toDateString() };
             
             return response;

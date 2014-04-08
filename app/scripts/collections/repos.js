@@ -20,10 +20,13 @@ sevengeese.Collections = sevengeese.Collections || {};
 
     	onColReset: function(collection, options) {
 	        _.each(collection.models, function(model){
-	        	model.fetch({ success: function(model, response, options){
-	        		collection.set(model, {remove:false});
-	        		collection.sort();
-	        	}});
+	        	//console.log(model.get('is_fork'));
+	        	if(model.get('is_fork')){
+		        	model.fetch({ success: function(model, response, options){
+		        		collection.set(model, {remove:false});
+		        		collection.sort();
+		        	}});
+	        	}
 	        	return model;
 	        });
 	        
