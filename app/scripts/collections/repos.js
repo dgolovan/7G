@@ -9,17 +9,25 @@ sevengeese.Collections = sevengeese.Collections || {};
 
         model: sevengeese.Models.RepoModel,
         url: 'https://api.github.com/orgs/7geese/repos',
+        
+        comparator: function(item){
+			 return -1*item.get('forks');
+        },
+        
+        initialize: function() {
+        	this.bind('reset', this.onColReset, this );
+    	},
 
-        parse: function(response) {
-        	response = _.map(response, function(resp){
-        		return {name: resp.name, forks: resp.forks, url: resp.html_url, created: new Date(resp.created_at).toDateString()};
-        	});
-        	response = _.sortBy(response, function(resp){
-        		return resp.forks * -1;
-        	});
-        	console.log(response);
-		    return response;
-		  }
+    	onColReset: function(collection, options) {
+	        _.each(collection.models, function(model){
+	        	model.fetch({ success: function(model, response, options){
+	        		collection.set(model, {remove:false});
+	        		collection.sort();
+	        	}});
+	        	return model;
+	        });
+	        
+	    },
 
     });
 

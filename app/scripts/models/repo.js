@@ -7,18 +7,25 @@ sevengeese.Models = sevengeese.Models || {};
 
     sevengeese.Models.RepoModel = Backbone.Model.extend({
 
-        url: '',
+        url: 'https://api.github.com/repos/7geese/',
 
         initialize: function() {
+            this.url = this.url + this.get('name');
         },
 
-        defaults: {
-        },
-
-        validate: function(attrs, options) {
-        },
-
-        parse: function(response, options)  {
+        parse: function(resp, options)  {
+            var forks = resp.forks || 0;
+            var created = resp.created_at || "";
+            if (resp.source){
+                forks = resp.source.forks;
+                created = resp.source.created_at;
+            }
+            
+            var response = { name: resp.name, 
+                             forks: forks, 
+                             url: resp.html_url, 
+                             created: new Date(created).toDateString() };
+            
             return response;
         }
     });
